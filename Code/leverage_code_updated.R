@@ -20,23 +20,6 @@ woba_save <- woba_save %>% mutate(leverage = abs(ab_win_expect)/abs(mean_win_exp
 
 mean(woba_save$leverage, na.rm = TRUE) -> mean_leverage
 
-average_leverage <- woba_save %>% 
-  filter(bat_score_diff == -1) %>% 
-  group_by(inning) %>% 
-  reframe(leverage = mean(leverage, na.rm = TRUE))
-
-test_woba_save <- woba_save %>% mutate(LI_diff = if_else((bat_score - fld_score) == lead(bat_score - fld_score),
-      leverage - lead(leverage), -abs((leverage - lead(leverage)) * run_expectancy_saves)))
-
-
-#woba_save <- woba_save %>% 
-#  mutate(LI_diff = case_when((bat_score - fld_score) == (post_bat_score - post_fld_score) && inning < 9 ~ 
-#                               leverage - lead(leverage), 
- #                            (bat_score - fld_score) != (post_bat_score - post_fld_score) && inning < 9 ~ 
-  #         -abs((leverage - lead(leverage)) * run_expectancy_saves), 
-   #        home_score < away_score && group_by(game_pk) %>% max(at_bat_number, inning) ~ abs(leverage - 0),
-    #     ))
-
 woba_save <- woba_save %>% 
   mutate(is_home_team = ifelse(inning_topbot == "Top", 1, 0),)
 
